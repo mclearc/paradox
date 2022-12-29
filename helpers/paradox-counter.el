@@ -32,10 +32,10 @@
 
 (require 'paradox-github)
 (require 'json)
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defcustom paradox-melpa-directory
-  (expand-file-name "~/.melpa/")
+  (expand-file-name (concat lem-var-dir "melpa/"))
   "Directory with melpa package recipes."
   :type 'directory
   :group 'paradox)
@@ -99,7 +99,7 @@ Also saves result to `package-star-count'"
         (ignore-errors
           (let ((name (car it)))
             (let-alist (cdr it)
-              (paradox-log "%s / %s" (incf i) name)
+              (paradox-log "%s / %s" (cl-incf i) name)
               (pcase .fetcher
                 (`"github"
                  (let ((count (paradox-fetch-star-count .repo)))
