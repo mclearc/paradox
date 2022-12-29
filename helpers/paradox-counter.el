@@ -64,8 +64,7 @@
   (with-temp-file paradox--output-data-file
     (pp paradox--star-count (current-buffer))
     (pp paradox--package-repo-list (current-buffer))
-    (pp paradox--download-count (current-buffer))
-    (pp paradox--wiki-packages (current-buffer))))
+    (pp paradox--download-count (current-buffer))))
 
 (defun paradox-fetch-star-count (repo)
   (cdr (assq 'stargazers_count
@@ -86,7 +85,6 @@ Also saves result to `package-star-count'"
     (setq paradox--download-count
           (paradox--github-action paradox-download-count-url :reader #'json-read)))
   (let ((table-size (hash-table-count paradox--download-count)))
-    (setq paradox--wiki-packages (make-hash-table :size table-size))
     (setq paradox--package-repo-list (make-hash-table :size table-size))
     (setq paradox--star-count (make-hash-table :size table-size)))
   (with-current-buffer (let ((inhibit-message t))
@@ -107,9 +105,7 @@ Also saves result to `package-star-count'"
                        (progn
                          (puthash name count paradox--star-count)
                          (puthash name .repo paradox--package-repo-list))
-                     (paradox-log "FAILED: %s / %s" i name))))
-                (`"wiki"
-                 (puthash name t paradox--wiki-packages)))))))))
+                     (paradox-log "FAILED: %s / %s" i name)))))))))))
   (paradox-list-to-file))
 
 (provide 'paradox-counter)
